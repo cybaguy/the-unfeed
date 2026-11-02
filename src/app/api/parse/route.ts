@@ -1,5 +1,7 @@
 import { isSafeUrl } from "@/src/lib/urlSafety";
 import { parseHtml } from "@/src/lib/parseHtml";
+import { countWords, calculateReadingTime } from "@/src/lib/readingTime";
+import { ParsedArticle } from "@/src/types/article";
 
 export async function POST(request: Request) {
   const rawBody = await request.json();
@@ -59,12 +61,18 @@ export async function POST(request: Request) {
     );
   }
 
-  return Response.json({
-    received: {
-      url: rawBody.url,
-      title,
-      paragraphCount: paragraphs.length,
-      firstParagraphPreview: paragraphs[0]?.slice(0, 100),
-    },
-  });
+   const text = paragraphs.join(" ");
+   const wordCount = countWords(text);
+   const estimatedMinutes = calculateReadingTime(wordCount);
+
+   const article: ParsedArticle = {
+    title,
+    paragraphs,
+    wordCount,
+    estimatedMinutes,
+    sourceUrl: rawBody.url,
+   };
+
+   return Response.json({article});
+
 }
