@@ -27,7 +27,7 @@ const blockedPatterns = [
     /^10\./,
     /^192\.168\./,
     /^172\.(1[6-9]|2[0-9]|3[01])\./,
-    /^\[::1\]$/,
+    /^\[.*\]$/,      // block ALL bracketed IPv6 hosts (V1 simplification)
     /\.internal$/,
     /\.local$/,
 ];
