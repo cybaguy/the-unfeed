@@ -22,7 +22,7 @@ const host= parsed.hostname.toLowerCase();
 const blockedPatterns = [
     /^localhost$/,
     /^127\./,
-    /^0\.0\.0\.0s/,
+    /^0\.0\.0\.0$/,
     /^169\.254\./,
     /^10\./,
     /^192\.168\./,
