@@ -32,3 +32,21 @@
 - Typography controls (font size, line height)
 - Reading progress indicator (scroll position)
 - Estimated "time saved" vs. reading the original ad-laden page
+
+## V2 — Planned upgrades (from 2026-11-14 conversation)
+
+### Persistence
+- Replace sessionStorage with localStorage
+- Cap stored articles at N (e.g., 20), evict oldest first (LRU)
+- Keep the Context API contract unchanged — only the storage backend swaps
+
+### Parser
+- Integrate Mozilla Readability.js for non-`<p>` content (PG essays, HN threads)
+- Should lift real-URL success from ~14% fail to ~85% success
+- Keep the current `<p>`-only parser as fallback if Readability returns nothing
+
+### UI
+- Dark mode toggle (Tailwind dark: classes + localStorage persistence)
+- Typography controls (font size, line height)
+- Reading progress indicator (scroll position)
+- Estimated "time saved" vs. reading the original ad-laden page
