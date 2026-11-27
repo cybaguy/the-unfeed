@@ -5,6 +5,15 @@ import { useRouter } from "next/navigation";
 import { useArticles } from "@/src/context/ArticleContext";
 import type { ParsedArticle } from "@/src/types/article";
 
+function normalizeUrl(input: string): string {
+  const trimmed = input.trim();
+  if (!trimmed) return "";
+  // If it already has a scheme (http:, https:, file:, javascript:, etc.), leave it alone — backend validates
+  if (/^[a-z][a-z0-9+.-]*:/i.test(trimmed)) return trimmed;
+  // Otherwise, assume https
+  return `https://${trimmed}`;
+}
+
 export function UrlInput() {
   const [url, setUrl] = useState("");
   const [loading, setLoading] = useState(false);
@@ -16,13 +25,13 @@ export function UrlInput() {
     e.preventDefault();
     setError(null);
 
-    const trimmed = url.trim();
+    const trimmed = normalizeUrl(url);
     if (!trimmed) {
       setError("Please enter a URL");
       return;
     }
 
-    // Already saved? Redirect directly (Option B from earlier decision)
+    // Already saved? Redirect directly
     const existing = getArticleByUrl(trimmed);
     if (existing) {
       router.push(`/read/${encodeURIComponent(trimmed)}`);
@@ -58,10 +67,10 @@ export function UrlInput() {
     <form onSubmit={handleSubmit} className="w-full">
       <div className="flex gap-3">
         <input
-          type="url"
+          type="text"
           value={url}
           onChange={(e) => setUrl(e.target.value)}
-          placeholder="https://example.com/article"
+          placeholder="example.com/article or paste full URL"
           disabled={loading}
           className="flex-1 px-5 py-4 text-lg rounded-xl border border-gray-300 bg-white text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent disabled:opacity-50"
         />

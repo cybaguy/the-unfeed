@@ -6,31 +6,31 @@ import Link from "next/link";
 import { useArticles } from "@/src/context/ArticleContext";
 import type { ParsedArticle } from "@/src/types/article";
 
-// Inner component that uses the hook
 function ReadView() {
   const params = useParams();
   const router = useRouter();
-  const { getArticleByUrl } = useArticles();
+  const { getArticleByUrl, hydrated } = useArticles();
   const [article, setArticle] = useState<ParsedArticle | null>(null);
-  const [mounted, setMounted] = useState(false);
 
   const urlParam = decodeURIComponent(params.url as string);
 
   useEffect(() => {
-    setMounted(true);
+    if (!hydrated) return;
     const found = getArticleByUrl(urlParam);
     if (found) {
       setArticle(found);
     } else {
-      const timer = setTimeout(() => {
-        const retry = getArticleByUrl(urlParam);
-        if (!retry) router.push("/");
-      }, 100);
-      return () => clearTimeout(timer);
+      router.push("/");
     }
-  }, [urlParam]);
+  }, [urlParam, hydrated, getArticleByUrl, router]);
 
-  if (!mounted) return null;
+  if (!hydrated) {
+    return (
+      <main className="min-h-screen bg-[#faf9f6] flex items-center justify-center">
+        <p className="text-gray-500">Loading...</p>
+      </main>
+    );
+  }
 
   if (!article) {
     return (
@@ -67,14 +67,15 @@ function ReadView() {
   );
 }
 
-// Server-ish wrapper with Suspense
 export default function ReadPage() {
   return (
-    <Suspense fallback={
-      <main className="min-h-screen bg-[#faf9f6] flex items-center justify-center">
-        <p className="text-gray-500">Loading...</p>
-      </main>
-    }>
+    <Suspense
+      fallback={
+        <main className="min-h-screen bg-[#faf9f6] flex items-center justify-center">
+          <p className="text-gray-500">Loading...</p>
+        </main>
+      }
+    >
       <ReadView />
     </Suspense>
   );
