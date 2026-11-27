@@ -8,7 +8,7 @@ A minimalist, distraction-free content curator. Paste a messy article URL, and r
 
 | Landing Page | Reading View |
 | :---: | :---: |
-| *(Insert mobile screenshot here)* | *(Insert reading view screenshot here)* |
+| ![Landing Page](/landing.png) | ![Reading View](/reading.png) |
 
 ## 🛠️ Tech Stack
 - **Framework:** Next.js 16 (App Router, Turbopack)
