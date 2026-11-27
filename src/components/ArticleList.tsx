@@ -22,9 +22,9 @@ export function ArticleList() {
       <ul className="space-y-3">
         {articles.map((article) => (
           <li
-            key={article.sourceUrl}
-            className="bg-white rounded-xl border border-gray-200 p-4 flex items-center justify-between gap-4"
-          >
+          key={article.sourceUrl}
+          className="bg-white rounded-xl border border-gray-200 p-4 md:p-5 flex items-center justify-between gap-4"
+        >
             <Link
               href={`/read/${encodeURIComponent(article.sourceUrl)}`}
               className="flex-1 min-w-0"
